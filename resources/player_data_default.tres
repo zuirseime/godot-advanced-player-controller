@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=2 format=3 uid="uid://xrdj11ruqgsj"]
+
+[ext_resource type="Script" uid="uid://by5u3pfdxgvlc" path="res://scripts/PlayerData.cs" id="1_gnca7"]
+
+[resource]
+script = ExtResource("1_gnca7")
+WalkSpeed = 1.5
+SprintSpeed = 5.0
+CrouchSpeed = 0.75
+MaxStamina = 100.0
+StaminaDrainPerSecond = 15.0
+StaminaRegenPerSecond = 10.0
+StaminaRegenDelay = 1.0
+MaxSanity = 100.0
+SanityDrainPerSecond = 5.0
+SanityRegenPerSecond = 2.0
+SanityRegenCrowdFactor = 2.0
+SanityRegenDelay = 1.0
+MouseSensitivityX = 0.1
+MouseSensitivityY = 0.1
+CameraMinPitch = -85.0
+CameraMaxPitch = 85.0
+StandHeight = 1.7
+CrouchHeight = 1.0
+metadata/_custom_type_script = "uid://by5u3pfdxgvlc"

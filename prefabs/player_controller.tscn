@@ -1,6 +1,53 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkcycr1oueue"]
+[gd_scene load_steps=10 format=3 uid="uid://bkcycr1oueue"]
 
-[ext_resource type="Script" uid="uid://l4iy7kjy824g" path="res://scripts/PlayerController.cs" id="1_p0wx1"]
+[ext_resource type="Script" uid="uid://l4iy7kjy824g" path="res://scripts/Player.cs" id="1_p0wx1"]
+[ext_resource type="Script" uid="uid://cowkqfmlcrflp" path="res://scripts/PlayerInput.cs" id="2_51y0g"]
+[ext_resource type="Resource" uid="uid://xrdj11ruqgsj" path="res://resources/player_data_default.tres" id="2_a22ng"]
+[ext_resource type="Script" uid="uid://weq37dks05f3" path="res://scripts/PlayerModel.cs" id="4_a22ng"]
+[ext_resource type="Script" uid="uid://bvmvu2wbuw8ju" path="res://scripts/PlayerCamera.cs" id="5_m11dk"]
+[ext_resource type="Script" uid="uid://2r7wsvqqcb53" path="res://scripts/PlayerMovement.cs" id="6_bnhpu"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p0wx1"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_tpop7"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_km0ln"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_p0wx1")
+Data = ExtResource("2_a22ng")
+
+[node name="PlayerInput" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_51y0g")
+
+[node name="PhysicsBody" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_p0wx1")
+
+[node name="Model" type="Node3D" parent="."]
+script = ExtResource("4_a22ng")
+
+[node name="MeshInstance" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_tpop7")
+
+[node name="AnimationTree" type="AnimationTree" parent="Model"]
+tree_root = SubResource("AnimationNodeStateMachine_km0ln")
+
+[node name="Head" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+script = ExtResource("5_m11dk")
+
+[node name="Camera" type="Camera3D" parent="Head"]
+unique_name_in_owner = true
+current = true
+
+[node name="Interactor" type="RayCast3D" parent="Head"]
+
+[node name="PlayerInventory" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="PlayerMovement" type="Node" parent="."]
+script = ExtResource("6_bnhpu")
