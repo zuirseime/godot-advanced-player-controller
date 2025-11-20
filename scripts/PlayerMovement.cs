@@ -3,9 +3,15 @@ using System;
 
 public partial class PlayerMovement : Node
 {
-  private PlayerData _data { get; set; }
+  [Export] private float _acceleration = 25f;
+  [Export] private float _deceleration = 20f;
 
-  private Vector2 _movement;
+  public event EventHandler<(Vector3 position, float speed)> Moved;
+
+  private PlayerData _data;
+
+  private Vector3 _movement;
+  private float _moveSpeed;
 
   private bool _sprint;
   private bool _crouch;
@@ -28,7 +34,7 @@ public partial class PlayerMovement : Node
 
     var input = GetNode<PlayerInput>("%PlayerInput");
 
-    input.MoveInputChanged += (s, v) => _movement = v;
+    input.MoveInputChanged += OnMovementChanged;
     input.LookInputChanged += OnLookChanged;
     input.SprintChanged += (s, b) => _sprint = b;
 
@@ -37,15 +43,46 @@ public partial class PlayerMovement : Node
 
   public override void _PhysicsProcess(double delta)
   {
-    Vector3 velocity = _body.Velocity;
-
     if (!_body.IsOnFloor())
     {
-      velocity += _body.GetGravity() * (float)delta;
+      _body.Velocity += _body.GetGravity() * (float)delta;
     }
 
-    // ApplyLook(delta); 
     ApplyMovement(delta);
+  }
+
+  private void ApplyMovement(double delta)
+  {
+    float targetSpeed;
+
+    if (_crouch)
+    {
+      targetSpeed = _data.CrouchSpeed;
+    }
+    else if (_sprint && _stamina > 0f)
+    {
+      targetSpeed = _data.SprintSpeed;
+    }
+    else
+    {
+      targetSpeed = _data.WalkSpeed;
+    }
+
+    Vector3 targetVelocity = _movement * targetSpeed;
+    Vector3 currentVelocity = _body.Velocity;
+
+    float acceleration = _movement.Length() > 0.1f ? _acceleration : _deceleration;
+
+    Vector3 smoothVelocity = new Vector3(
+      Mathf.MoveToward(currentVelocity.X, targetVelocity.X, acceleration * (float)delta),
+      currentVelocity.Y,
+      Mathf.MoveToward(currentVelocity.Z, targetVelocity.Z, acceleration * (float)delta)
+    );
+
+    _body.Velocity = smoothVelocity;
+    _body.MoveAndSlide();
+
+    Moved?.Invoke(this, (_body.Position, _body.Velocity.Length()));
   }
 
   private void OnLookChanged(object sender, Vector2 motion)
@@ -58,14 +95,14 @@ public partial class PlayerMovement : Node
     _head.Rotation = new Vector3(Mathf.Clamp(_head.Rotation.X, _data.CameraMinPitch, _data.CameraMaxPitch), 0, 0);
   }
 
-  private void ApplyMovement(double delta)
+  private void OnMovementChanged(object sender, Vector2 motion)
   {
-    
+    _movement = _body.GlobalTransform.Basis * new Vector3(motion.X, 0f, motion.Y);
   }
 
   private void ApplyCharacterHeight()
   {
-    var collider = GetNode<CollisionShape3D>("PhysicsBody");
+    var collider = GetNode<CollisionShape3D>("%PhysicsBody");
     var shape = collider.Shape as CapsuleShape3D;
 
     if (shape is null) 

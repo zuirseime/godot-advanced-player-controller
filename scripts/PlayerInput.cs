@@ -9,7 +9,7 @@ public partial class PlayerInput : Node
   public event EventHandler CrouchToggled;
   public event EventHandler Interacted;
 
-  public override void _UnhandledInput(InputEvent @event)
+  public override void _Input(InputEvent @event)
   {
     if (@event is InputEventMouseButton)
     {
@@ -25,11 +25,11 @@ public partial class PlayerInput : Node
     {
       LookInputChanged?.Invoke(this, motion.Relative);
     }
-      
-    Vector2 movementDirection = new Vector2(
-      Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
-      Input.GetActionStrength("move_forward") - Input.GetActionStrength("move_backward")
-    );
+  }
+
+  public override void _UnhandledInput(InputEvent @event)
+  {
+    Vector2 movementDirection = Input.GetVector("move_left", "move_right", "move_forward", "move_backward").Normalized();
     MoveInputChanged?.Invoke(this, movementDirection);
 
     SprintChanged?.Invoke(this, Input.IsActionPressed("sprint"));

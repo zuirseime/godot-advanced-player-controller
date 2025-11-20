@@ -22,6 +22,7 @@ unique_name_in_owner = true
 script = ExtResource("2_51y0g")
 
 [node name="PhysicsBody" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_p0wx1")
 
@@ -45,6 +46,7 @@ unique_name_in_owner = true
 current = true
 
 [node name="Interactor" type="RayCast3D" parent="Head"]
+target_position = Vector3(0, 0, -1.5)
 
 [node name="PlayerInventory" type="Node" parent="."]
 unique_name_in_owner = true

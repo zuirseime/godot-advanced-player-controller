@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://blrvoe45v1jdn"]
+[gd_scene load_steps=9 format=3 uid="uid://blrvoe45v1jdn"]
 
 [ext_resource type="PackedScene" uid="uid://bkcycr1oueue" path="res://prefabs/player_controller.tscn" id="1_nnsk1"]
+[ext_resource type="PackedScene" uid="uid://bkeiqscvehmfk" path="res://scenes/UI.tscn" id="1_rwgxs"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nnsk1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -24,6 +25,8 @@ size = Vector2(16, 16)
 size = Vector3(16, 0.001, 16)
 
 [node name="World" type="Node3D"]
+
+[node name="UI" parent="." instance=ExtResource("1_rwgxs")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_4wyf3")
