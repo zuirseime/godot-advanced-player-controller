@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbd83gwirgenf"]
+
+[ext_resource type="Script" uid="uid://bmumohjmi5ahn" path="res://scripts/Interactable.cs" id="1_ysexe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ysexe"]
+
+[node name="Interactable" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_ysexe")
+ShapeScale = Vector3(1, 1, 1)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ysexe")
+
+[node name="Hint" type="Label3D" parent="."]
+unique_name_in_owner = true
+layers = 512
+pixel_size = 0.001
+billboard = 1
+no_depth_test = true
+text = "Lorem ipsum"
+font_size = 64
+outline_size = 1

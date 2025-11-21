@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://blrvoe45v1jdn"]
+[gd_scene load_steps=15 format=3 uid="uid://blrvoe45v1jdn"]
 
 [ext_resource type="PackedScene" uid="uid://bkcycr1oueue" path="res://prefabs/player_controller.tscn" id="1_nnsk1"]
 [ext_resource type="PackedScene" uid="uid://bkeiqscvehmfk" path="res://scenes/UI.tscn" id="1_rwgxs"]
+[ext_resource type="PackedScene" uid="uid://bbd83gwirgenf" path="res://prefabs/interactable.tscn" id="3_4wyf3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nnsk1"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -18,11 +19,28 @@ glow_enabled = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rwgxs"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rwgxs"]
+albedo_color = Color(0.34901962, 0.46666667, 0.07058824, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_nnsk1"]
+material = SubResource("StandardMaterial3D_rwgxs")
 size = Vector2(16, 16)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4wyf3"]
-size = Vector3(16, 0.001, 16)
+size = Vector3(16, 0.001, 18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rwgxs"]
+size = Vector3(3, 0.1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rwgxs"]
+size = Vector3(3, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k0juu"]
+albedo_color = Color(0.78, 0.25739998, 0.25739998, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_71j4m"]
+material = SubResource("StandardMaterial3D_k0juu")
+size = Vector3(1, 0.3, 0.5)
 
 [node name="World" type="Node3D"]
 
@@ -36,6 +54,7 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_rwgxs")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
@@ -44,4 +63,23 @@ mesh = SubResource("PlaneMesh_nnsk1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_4wyf3")
 
+[node name="Board" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, -3)
+physics_material_override = SubResource("PhysicsMaterial_rwgxs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Board"]
+mesh = SubResource("BoxMesh_rwgxs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Board"]
+shape = SubResource("BoxShape3D_rwgxs")
+
 [node name="Player" parent="." instance=ExtResource("1_nnsk1")]
+
+[node name="MysteryBox" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -3)
+
+[node name="Interactable" parent="MysteryBox" instance=ExtResource("3_4wyf3")]
+ShapeScale = Vector3(1, 0.3, 0.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MysteryBox"]
+mesh = SubResource("BoxMesh_71j4m")
